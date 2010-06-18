@@ -1,0 +1,8 @@
+=== Plain mapping
++++ jsync
+{"one":"two","three":"four"}
++++ yaml
+---
+one: two
+three: four
+
