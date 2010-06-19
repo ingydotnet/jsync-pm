@@ -1,4 +1,11 @@
 ---
+version: 0.03
+date:    Sat Jun 19 15:13:31 PDT 2010
+changes:
+- Dump and load recursive references
+- Dump and load typed mappings and sequences
+- Escaping of special keys and values
+---
 version: 0.02
 date:    Sat Jun 19 12:20:48 PDT 2010
 changes:

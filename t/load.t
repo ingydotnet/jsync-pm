@@ -1,4 +1,4 @@
-use t::TestJSYNC tests => 3;
+use t::TestJSYNC tests => 6;
 
 no_diff;
 

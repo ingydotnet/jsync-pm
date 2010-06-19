@@ -23,3 +23,25 @@ three: four
 ---
 - ~
 - x: ~
+
+=== Recursive Reference
++++ jsync
+{"&":"1","x":"*1"}
++++ yaml
+--- &1
+x: *1
+
+=== Typed Mapping
++++ jsync
+{"!":"!perl/hash:Foo","x":"y"}
++++ yaml
+--- !!perl/hash:Foo
+x: y
+
+=== Typed Sequence
++++ jsync
+["!!perl/array:Foo","x","y"]
++++ yaml
+--- !!perl/array:Foo
+- x
+- y

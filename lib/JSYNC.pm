@@ -6,7 +6,7 @@ use warnings;
 use JSON;
 # use XXX; # -with => 'Data::Dumper';
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 my $next_anchor;
 my $seen;
@@ -54,29 +54,34 @@ sub _represent {
                 $info->{repr}{'&'} = $info->{anchor};
             }
             else {
-                WWW $info;
                 unshift @{$info->{repr}}, '&' . $info->{anchor};
             }
         }
         return "*" . $info->{anchor};
     }
+    my $tag = _resolve_to_tag($kind, $class);
     if ($kind eq 'array') {
-        $repr = [ map { _represent($_) } @$node ];
+        $repr = [];
+        $seen->{$id} = { repr => $repr, kind => $kind };
+        @$repr = map { _represent($_) } @$node;
+        if ($tag) {
+            unshift @$repr, "!$tag";
+        }
     }
     elsif ($kind eq 'hash') {
         $repr = {};
+        $seen->{$id} = { repr => $repr, kind => $kind };
         for my $k (keys %$node) {
-            $repr->{$k} = _represent($node->{$k});
+            $repr->{_represent($k)} = _represent($node->{$k});
+        }
+        if ($tag) {
+            $repr->{'!'} = $tag;
         }
     }
     else {
         die "Can't represent kind '$kind'";
         # XXX [$id, $kind, $class];
     }
-    $seen->{$id} = {
-        repr => $repr,
-        kind => $kind,
-    };
     return $repr;
 }
 
@@ -100,12 +105,22 @@ sub _construct {
             delete $repr->{'&'};
             $seen->{$anchor} = $node;
         }
+        if ($repr->{'!'}) {
+            my $class = _resolve_from_tag($repr->{'!'});
+            delete $repr->{'!'};
+            bless $node, $class;
+        }
         for my $k (keys %$repr) {
             $node->{$k} = _construct($repr->{$k});
         }
     }
     elsif ($kind eq 'array') {
         $node = [];
+        if (@$repr and defined $repr->[0] and $repr->[0] =~ /^!(.*)$/) {
+            my $class = _resolve_from_tag($1);
+            shift @$repr;
+            bless $node, $class;
+        }
         if (@$repr and $repr->[0] and $repr->[0] =~ /^\&(\S+)$/) {
             $seen->{$1} = $node;
             shift @$repr;
@@ -113,6 +128,18 @@ sub _construct {
         @$node = map {_construct($_)} @$repr;
     }
     return $node;
+}
+
+sub _resolve_to_tag {
+    my ($kind, $class) = @_;
+    return $class && "!perl/$kind\:$class";
+}
+
+sub _resolve_from_tag {
+    my ($tag) = @_;
+    $tag =~ m{^!perl/(?:hash|array|object):(\S+)$}
+      or die "Can't resolve tag '$tag'";
+    return $1;
 }
 
 sub _escape {
@@ -139,8 +166,11 @@ This is a very early release of JSYNC, and should not be used at all
 unless you know what you are doing.
 
 Supported so far:
-* dump and load of things JSON handles.
-* dump and load of duplicate references.
+- dump and load of the basic JSON model
+- dump and load of duplicate references
+- dump and load recursive references
+- dump and load typed mappings and sequences
+- escaping of special keys and values
 
 =head1 SYNOPSIS
 

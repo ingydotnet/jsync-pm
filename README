@@ -5,8 +5,10 @@ STATUS
     This is a very early release of JSYNC, and should not be used at all
     unless you know what you are doing.
 
-    Supported so far: * dump and load of things JSON handles. * dump and
-    load of duplicate references.
+    Supported so far: - dump and load of the basic JSON model - dump and
+    load of duplicate references - dump and load recursive references - dump
+    and load typed mappings and sequences - escaping of special keys and
+    values
 
 SYNOPSIS
         use JSYNC;
