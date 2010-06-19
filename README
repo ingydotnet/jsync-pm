@@ -1,6 +1,13 @@
 NAME
     JSYNC - JSON YAML Notation Coding
 
+STATUS
+    This is a very early release of JSYNC, and should not be used at all
+    unless you know what you are doing.
+
+    Supported so far: * dump and load of things JSON handles. * dump and
+    load of duplicate references.
+
 SYNOPSIS
         use JSYNC;
 
@@ -12,10 +19,6 @@ DESCRIPTION
     JSYNC is an extension of JSON that can serialize any data objects.
 
     See http://www.jsync.org/
-
-STATUS
-    This is a very early release of JSYNC, and should not be used at all
-    unless you know what you are doing.
 
 AUTHOR
     Ingy döt Net <ingy@cpan.org>

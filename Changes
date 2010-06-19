@@ -1,4 +1,10 @@
 ---
+version: 0.02
+date:    Sat Jun 19 12:20:48 PDT 2010
+changes:
+- Add dump and load support for multiple references
+- Support null without warnings
+---
 version: 0.01
 date:    Fri Jun 18 12:01:58 PDT 2010
 changes:

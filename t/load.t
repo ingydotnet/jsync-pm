@@ -1,4 +1,6 @@
-use t::TestJSYNC tests => 1;
+use t::TestJSYNC tests => 3;
+
+no_diff;
 
 spec_file 't/jsync-yaml.tml';
 

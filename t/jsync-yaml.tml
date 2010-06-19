@@ -6,3 +6,20 @@
 one: two
 three: four
 
+=== Duplicate Map Reference
++++ jsync
+[{"&":"1","x":"y"},"*1","*1"]
++++ yaml
+---
+- &1
+  x: y
+- *1
+- *1
+
+=== Nulls
++++ jsync
+[null,{"x":null}]
++++ yaml
+---
+- ~
+- x: ~
