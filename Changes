@@ -1,4 +1,9 @@
 ---
+version: 0.04
+date:    Mon Jun 21 22:04:36 PDT 2010
+changes:
+- Add glob dumping support
+---
 version: 0.03
 date:    Sat Jun 19 15:13:31 PDT 2010
 changes:

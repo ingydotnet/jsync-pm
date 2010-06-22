@@ -45,3 +45,12 @@ x: y
 --- !!perl/array:Foo
 - x
 - y
+
+=== Globs
++++ perl
+package main;
+no strict;
+$foo = 'O HAI';
+*foo;
++++ jsync
+{"!":"!perl/glob:","NAME":"foo","PACKAGE":"main","SCALAR":"O HAI"}

@@ -8,7 +8,7 @@ STATUS
     Supported so far: - dump and load of the basic JSON model - dump and
     load of duplicate references - dump and load recursive references - dump
     and load typed mappings and sequences - escaping of special keys and
-    values
+    values - dump globs
 
 SYNOPSIS
         use JSYNC;

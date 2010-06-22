@@ -6,7 +6,7 @@ use warnings;
 use JSON;
 # use XXX; # -with => 'Data::Dumper';
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 my $next_anchor;
 my $seen;
@@ -29,6 +29,11 @@ sub load {
 }
 
 sub _info {
+    if (ref(\$_[0]) eq 'GLOB') {
+        (\$_[0] . "") =~ /^(?:(.+)=)?(GLOB)\((0x.*)\)$/
+            or die "Can't get info for '$_[0]'";
+        return ($3, lc($2), $1 || '');
+    }
     if (not ref($_[0])) {
         return (undef, 'scalar', undef);
     }
@@ -78,9 +83,35 @@ sub _represent {
             $repr->{'!'} = $tag;
         }
     }
+    elsif ($kind eq 'glob') {
+        $class ||= 'main';
+        $repr = {};
+        $repr->{PACKAGE} = $class;
+        $repr->{'!'} = '!perl/glob:';
+        for my $type (qw(PACKAGE NAME SCALAR ARRAY HASH CODE IO)) {
+            my $value = *{$node}{$type};
+            $value = $$value if $type eq 'SCALAR';
+            if (defined $value) {
+                if ($type eq 'IO') {
+                    my @stats = qw(device inode mode links uid gid rdev size
+                                   atime mtime ctime blksize blocks);
+                    undef $value;
+                    $value->{stat} = {};
+                    map {$value->{stat}{shift @stats} = $_} stat(*{$node});
+                    $value->{fileno} = fileno(*{$node});
+                    {
+                        local $^W;
+                        $value->{tell} = tell(*{$node});
+                    }
+                }
+                $repr->{$type} = $value;
+            }
+        }
+
+    }
     else {
-        die "Can't represent kind '$kind'";
         # XXX [$id, $kind, $class];
+        die "Can't represent kind '$kind'";
     }
     return $repr;
 }
@@ -171,6 +202,7 @@ Supported so far:
 - dump and load recursive references
 - dump and load typed mappings and sequences
 - escaping of special keys and values
+- dump globs
 
 =head1 SYNOPSIS
 
