@@ -54,3 +54,16 @@ $foo = 'O HAI';
 *foo;
 +++ jsync
 {"!":"!perl/glob:","NAME":"foo","PACKAGE":"main","SCALAR":"O HAI"}
+
+=== Dump Options
++++ perl_run
+JSYNC::dump(['hello', 42, { goodbye => 43 }], {pretty => 1})
++++ jsync_dump
+[
+   "hello",
+   "42",
+   {
+      "goodbye" : "43"
+   }
+]
+

@@ -8,13 +8,13 @@ STATUS
     Supported so far: - dump and load of the basic JSON model - dump and
     load of duplicate references - dump and load recursive references - dump
     and load typed mappings and sequences - escaping of special keys and
-    values - dump globs
+    values - dump globs - add json pretty printing
 
 SYNOPSIS
         use JSYNC;
 
         my $object = <any perl expression>
-        my $jsync = JSYNC::dump($object);
+        my $jsync = JSYNC::dump($object, {pretty => 1});
         $object = JSYNC::load($jsync);
 
 DESCRIPTION

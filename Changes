@@ -1,4 +1,9 @@
 ---
+version: 0.05
+date:    Tue Jun 22 08:38:32 PDT 2010
+changes:
+- Add pretty printing
+---
 version: 0.04
 date:    Mon Jun 21 22:04:36 PDT 2010
 changes:

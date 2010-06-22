@@ -4,9 +4,9 @@ use strict;
 use warnings;
 
 use JSON;
-# use XXX; # -with => 'Data::Dumper';
+use XXX; # -with => 'Data::Dumper';
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 my $next_anchor;
 my $seen;
@@ -15,8 +15,13 @@ sub dump {
     $next_anchor = 1;
     $seen = {};
     my $object = shift;
+    my $config = shift || {};
     my $repr = _represent($object);
-    my $jsync = 'JSON'->new()->canonical()->encode($repr);
+    my $json = 'JSON'->new()->canonical();
+    if ($config->{pretty}) {
+        $json->pretty();
+    }
+    my $jsync = $json->encode($repr);
     return $jsync;
 }
 
@@ -203,13 +208,14 @@ Supported so far:
 - dump and load typed mappings and sequences
 - escaping of special keys and values
 - dump globs
+- add json pretty printing
 
 =head1 SYNOPSIS
 
     use JSYNC;
 
     my $object = <any perl expression>
-    my $jsync = JSYNC::dump($object);
+    my $jsync = JSYNC::dump($object, {pretty => 1});
     $object = JSYNC::load($jsync);
 
 =head1 DESCRIPTION
