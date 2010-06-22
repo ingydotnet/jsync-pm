@@ -4,9 +4,9 @@ use strict;
 use warnings;
 
 use JSON;
-use XXX; # -with => 'Data::Dumper';
+# use XXX; # -with => 'Data::Dumper';
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 my $next_anchor;
 my $seen;

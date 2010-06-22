@@ -1,4 +1,10 @@
 ---
+version: 0.06
+date:    Tue Jun 22 13:18:35 PDT 2010
+changes:
+- Switch from Test::Base to TestML
+- Thanks to Tommy++ and Chip++ at YAPC Acmeism Hackathon
+---
 version: 0.05
 date:    Tue Jun 22 08:38:32 PDT 2010
 changes:
