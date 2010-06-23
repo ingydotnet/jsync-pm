@@ -57,8 +57,11 @@ $foo = 'O HAI';
 
 === Dump Options
 +++ perl_run
-JSYNC::dump(['hello', 42, { goodbye => 43 }], {pretty => 1})
-+++ jsync_dump
+JSYNC::dump(
+    ['hello', 42, { goodbye => 43 }],
+    {pretty => 1}
+)
++++ jsync
 [
    "hello",
    "42",

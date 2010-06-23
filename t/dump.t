@@ -1,12 +1,5 @@
 use TestML -run, -bridge => 't::Bridge';
 
-# filters {
-#     yaml => ['load_yaml', 'dump_jsync'],
-#     jsync => 'chomp',
-#     perl => ['eval', 'dump_jsync'],
-#     perl_run => 'eval',
-# };
-
 __DATA__
 %TestML: 1.0
 %Title: Ingy's Test
@@ -15,5 +8,7 @@ __DATA__
 %PointMarker: +++
 
 *yaml.load_yaml().dump_jsync() == *jsync.chomp();
+
 *perl.eval().dump_jsync() == *jsync.chomp();
-*perl_run.eval() == *jsync_dump;
+
+*perl_run.eval() == *jsync;
