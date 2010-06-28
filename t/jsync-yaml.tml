@@ -46,6 +46,15 @@ x: y
 - x
 - y
 
+=== Schwern's Escaping Test
++++ jsync
+{".!":"not a type","..!":"not an escaped type","foo":"42"}
++++ yaml
+---
+'!': not a type
+'.!': not an escaped type
+foo: 42
+
 === Globs
 +++ perl
 package main;
