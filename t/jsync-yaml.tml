@@ -52,8 +52,8 @@ x: y
 +++ yaml
 ---
 '!': not a type
-'.!': not an escaped type
-foo: 42
+.!: not an escaped type
+foo: '42'
 
 === Globs
 +++ perl

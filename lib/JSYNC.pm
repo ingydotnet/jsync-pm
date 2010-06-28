@@ -6,7 +6,7 @@ use warnings;
 use JSON;
 # use XXX; # -with => 'Data::Dumper';
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 my $next_anchor;
 my $seen;
@@ -147,7 +147,7 @@ sub _construct {
             bless $node, $class;
         }
         for my $k (keys %$repr) {
-            $node->{$k} = _construct($repr->{$k});
+            $node->{_unescape($k)} = _construct($repr->{$k});
         }
     }
     elsif ($kind eq 'array') {

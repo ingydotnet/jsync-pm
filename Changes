@@ -1,4 +1,9 @@
 ---
+version: 0.07
+date:    Sun Jun 27 23:39:39 PDT 2010
+changes:
+- Unescape keys on load. Schwern++
+---
 version: 0.06
 date:    Tue Jun 22 13:18:35 PDT 2010
 changes:
