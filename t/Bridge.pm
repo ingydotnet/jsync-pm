@@ -1,5 +1,4 @@
 package t::Bridge;
-use TestML::Bridge -base;
 use JSYNC;
 use YAML::XS;
 

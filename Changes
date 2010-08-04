@@ -1,4 +1,9 @@
 ---
+version: 0.08
+date:    Tue Aug  3 18:29:56 PDT 2010
+changes:
+- TestML::Bridge no longer exists. Removed it from tests.
+---
 version: 0.07
 date:    Sun Jun 27 23:39:39 PDT 2010
 changes:
