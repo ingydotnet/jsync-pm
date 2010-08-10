@@ -6,7 +6,7 @@ use warnings;
 use JSON;
 # use XXX; # -with => 'Data::Dumper';
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 my $next_anchor;
 my $seen;

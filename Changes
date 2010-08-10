@@ -1,4 +1,9 @@
 ---
+version: 0.09
+date:    Tue Aug 10 02:03:12 PDT 2010
+changes:
+- New TestML bundles Pegex.
+---
 version: 0.08
 date:    Tue Aug  3 18:29:56 PDT 2010
 changes:
