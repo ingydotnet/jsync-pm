@@ -1,4 +1,9 @@
 ---
+version: 0.10
+date:    Sat Aug 14 18:11:15 PDT 2010
+changes:
+- Use new Gloom
+---
 version: 0.09
 date:    Tue Aug 10 02:03:12 PDT 2010
 changes:
