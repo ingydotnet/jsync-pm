@@ -22,11 +22,14 @@ DESCRIPTION
 
     See http://www.jsync.org/
 
-REPOSITORY AND COMMUNITY
-    The JSYNC module can be found on CPAN and on GitHub:
-    <http://github.com/ingydotnet/jsync-pm>.
+RESOURCES
+    Web: <http://www.jsync.org/>
 
-    Please join the TestML discussion on #jsync on irc.freenode.net.
+    CPAN: <http://search.cpan.org/dist/JSYNC/>
+
+    GitHub: <http://github.com/ingydotnet/jsync-pm>
+
+    IRC: #jsync on irc.freenode.net
 
 AUTHOR
     Ingy döt Net <ingy@cpan.org>

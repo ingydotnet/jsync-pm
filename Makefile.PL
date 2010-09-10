@@ -8,4 +8,6 @@ test_requires   'YAML::XS';
 
 use_testml_tap;
 
+clean_files     'MANIFEST';
+
 WriteAll;

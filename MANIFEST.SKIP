@@ -1,4 +1,6 @@
+^MANIFEST\.bak$
 ^MANIFEST\.SKIP$
+
 ^.git/
 ^.gitignore
 ^Makefile$

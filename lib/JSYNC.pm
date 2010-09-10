@@ -6,7 +6,7 @@ use warnings;
 use JSON;
 # use XXX; # -with => 'Data::Dumper';
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 my $next_anchor;
 my $seen;
@@ -224,12 +224,15 @@ JSYNC is an extension of JSON that can serialize any data objects.
 
 See http://www.jsync.org/
 
-=head1 REPOSITORY AND COMMUNITY
+=head1 RESOURCES
 
-The JSYNC module can be found on CPAN and on GitHub:
-L<http://github.com/ingydotnet/jsync-pm>.
+Web: L<http://www.jsync.org/>
 
-Please join the TestML discussion on #jsync on irc.freenode.net.
+CPAN: L<http://search.cpan.org/dist/JSYNC/>
+
+GitHub: L<http://github.com/ingydotnet/jsync-pm>
+
+IRC: #jsync on irc.freenode.net
 
 =head1 AUTHOR
 

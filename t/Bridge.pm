@@ -1,37 +1,32 @@
 package t::Bridge;
 use JSYNC;
-use YAML::XS;
 
 sub load_jsync {
-    my ($self) = @_;
-    return JSYNC::load($self->value);
+    return JSYNC::load(shift->value);
 }
 
 sub dump_jsync {
-    my ($self) = @_;
-    return JSYNC::dump($self->value);
+    return JSYNC::dump(shift->value);
 }
 
 sub load_yaml {
-    my ($self) = @_;
-    return YAML::XS::Load($self->value);
+    require YAML::XS;
+    return YAML::XS::Load(shift->value);
 }
 
 sub dump_yaml {
-    my ($self) = @_;
-    return YAML::XS::Dump($self->value);
+    require YAML::XS;
+    return YAML::XS::Dump(shift->value);
 }
 
 sub chomp {
-    my ($self) = @_;
-    my $str = $self->value;
+    my $str = shift->value;
     chomp($str);
     return $str;
 }
 
 sub eval {
-    my ($self) = @_;
-    return eval($self->value);
+    return eval(shift->value);
 }
 
 1;
