@@ -1,4 +1,10 @@
 ---
+version: 0.12
+date:    Thu Sep 23 14:30:49 PDT 2010
+changes:
+- Use common JSYNC TestML test suite: http://github.com/ingydotnet/jsync-tml
+- Update Makefile.PL
+---
 version: 0.11
 date:    Thu Sep  9 20:50:12 PDT 2010
 changes:
