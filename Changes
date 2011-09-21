@@ -1,4 +1,10 @@
 ---
+version: 0.13
+date:    Wed Sep 21 23:15:16 CEST 2011
+changes:
+- Switch to Module::Package
+- Released from Liz++&Wendy++'s master bathroom.
+---
 version: 0.12
 date:    Thu Sep 23 14:30:49 PDT 2010
 changes:
