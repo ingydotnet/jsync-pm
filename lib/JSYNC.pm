@@ -3,7 +3,7 @@
 # abstract:  JSON YAML Notation Coding
 # author:    Ingy döt Net <ingy@ingy.net>
 # license:   perl
-# copyright: 2010, 2011
+# copyright: 2010, 2011, 2012
 # see:
 # - http://www.jsync.org/
 # - JSON
@@ -18,7 +18,7 @@ use JSON 2.53;
 
 package JSYNC;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 my $next_anchor;
 my $seen;
