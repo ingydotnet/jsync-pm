@@ -1,9 +1,9 @@
 ##
 # name:      JSYNC
-# abstract:  JSON YAML Notation Coding
+# abstract:  JSon Yaml eNCoding
 # author:    Ingy döt Net <ingy@ingy.net>
 # license:   perl
-# copyright: 2010, 2011, 2012
+# copyright: 2010, 2011, 2012, 2013
 # see:
 # - http://www.jsync.org/
 # - JSON
@@ -11,212 +11,229 @@
 # - irc.freenode.net#jsync
 
 use 5.008003;
-use strict;
-use warnings;
+use strict; use warnings;
+package JSYNC;
 
 use JSON 2.53;
 
-package JSYNC;
+our $VERSION = '0.15';
 
-our $VERSION = '0.14';
+{
+    package JSYNC;
 
-my $next_anchor;
-my $seen;
-
-sub dump {
-    $next_anchor = 1;
-    $seen = {};
-    my $object = shift;
-    my $config = shift || {};
-    my $repr = _represent($object);
-    my $json = 'JSON'->new()->canonical();
-    if ($config->{pretty}) {
-        $json->pretty();
+    sub dump {
+        my ($object, $config) = @_;
+        $config ||= {};
+        return JSYNC::Dumper->new(%$config)->dump($object);
     }
-    my $jsync = $json->encode($repr);
-    return $jsync;
-}
 
-sub load {
-    $seen = {};
-    my $jsync = shift;
-    my $repr = 'JSON'->new()->decode($jsync);
-    my $object = _construct($repr);
-    return $object;
-}
-
-sub _info {
-    if (ref(\$_[0]) eq 'GLOB') {
-        (\$_[0] . "") =~ /^(?:(.+)=)?(GLOB)\((0x.*)\)$/
-            or die "Can't get info for '$_[0]'";
-        return ($3, lc($2), $1 || '');
+    sub load {
+        my ($jsync) = @_;
+        return JSYNC::Loader->new->load($jsync);
     }
-    if (not ref($_[0])) {
-        return (undef, 'scalar', undef);
-    }
-    "$_[0]" =~ /^(?:(.+)=)?(HASH|ARRAY)\((0x.*)\)$/
-        or die "Can't get info for '$_[0]'";
-    return ($3, lc($2), $1 || '');
-}
 
-sub _represent {
-    my $node = shift;
-    my $repr;
-    my ($id, $kind, $class) = _info($node);
-    if ($kind eq 'scalar') {
-        if (not defined $node) {
-            return undef;
+    sub info {
+        my ($kind, $id, $class);
+        if (ref(\$_[0]) eq 'GLOB') {
+            (\$_[0] . "") =~ /^(?:(.+)=)?(GLOB)\((0x.*)\)$/
+                or die "Can't get info for '$_[0]'";
+            ($kind, $id, $class) = ('glob', $3, $1 || '');
         }
-        return _escape($node);
+        elsif (not ref($_[0])) {
+            $kind = 'scalar';
+        }
+        else {
+            "$_[0]" =~ /^(?:(.+)=)?(HASH|ARRAY)\((0x.*)\)$/
+                or die "Can't get info for '$_[0]'";
+            ($kind, $id, $class) =
+                (($2 eq 'HASH' ? 'map' : 'seq'), $3, $1 || '');
+        }
+        return ($kind, $id, $class);
     }
-    if (my $info = $seen->{$id}) {
-        if (not $info->{anchor}) {
-            $info->{anchor} = $next_anchor++ ."";
-            if ($info->{kind} eq 'hash') {
-                $info->{repr}{'&'} = $info->{anchor};
+};
+
+{
+    package JSYNC::Dumper;
+
+    sub new { bless { @_[1..$#_] }, $_[0] }
+
+    sub dump {
+        my ($self, $object) = @_;
+        $self->{anchor} = 1;
+        $self->{seen} = {};
+        my $graph = $self->represent($object);
+        my $json = 'JSON'->new()->canonical();
+        $json->pretty() if $self->{pretty};
+        return $json->encode($graph);
+    }
+
+    sub represent {
+        my ($self, $node) = @_;
+        my $seen = $self->{seen};
+        my $graph;
+        my ($kind, $id, $class) = JSYNC::info($node);
+        if ($kind eq 'scalar') {
+            if (not defined $node) {
+                return undef;
             }
-            else {
-                unshift @{$info->{repr}}, '&' . $info->{anchor};
-            }
+            return $self->escape($node);
         }
-        return "*" . $info->{anchor};
-    }
-    my $tag = _resolve_to_tag($kind, $class);
-    if ($kind eq 'array') {
-        $repr = [];
-        $seen->{$id} = { repr => $repr, kind => $kind };
-        @$repr = map { _represent($_) } @$node;
-        if ($tag) {
-            unshift @$repr, "!$tag";
-        }
-    }
-    elsif ($kind eq 'hash') {
-        $repr = {};
-        $seen->{$id} = { repr => $repr, kind => $kind };
-        for my $k (keys %$node) {
-            $repr->{_represent($k)} = _represent($node->{$k});
-        }
-        if ($tag) {
-            $repr->{'!'} = $tag;
-        }
-    }
-    elsif ($kind eq 'glob') {
-        $class ||= 'main';
-        $repr = {};
-        $repr->{PACKAGE} = $class;
-        $repr->{'!'} = '!perl/glob:';
-        for my $type (qw(PACKAGE NAME SCALAR ARRAY HASH CODE IO)) {
-            my $value = *{$node}{$type};
-            $value = $$value if $type eq 'SCALAR';
-            if (defined $value) {
-                if ($type eq 'IO') {
-                    my @stats = qw(device inode mode links uid gid rdev size
-                                   atime mtime ctime blksize blocks);
-                    undef $value;
-                    $value->{stat} = {};
-                    map {$value->{stat}{shift @stats} = $_} stat(*{$node});
-                    $value->{fileno} = fileno(*{$node});
-                    {
-                        local $^W;
-                        $value->{tell} = tell(*{$node});
-                    }
+        if (my $info = $seen->{$id}) {
+            if (not $info->{anchor}) {
+                $info->{anchor} = $self->{anchor}++ . "";
+                if ($info->{kind} eq 'map') {
+                    $info->{graph}{'&'} = $info->{anchor};
                 }
-                $repr->{$type} = $value;
+                else {
+                    unshift @{$info->{graph}}, '&' . $info->{anchor};
+                }
+            }
+            return "*" . $info->{anchor};
+        }
+        my $tag = $self->resolve_to_tag($kind, $class);
+        if ($kind eq 'seq') {
+            $graph = [];
+            $seen->{$id} = { graph => $graph, kind => $kind };
+            @$graph = map { $self->represent($_) } @$node;
+            if ($tag) {
+                unshift @$graph, "!$tag";
             }
         }
+        elsif ($kind eq 'map') {
+            $graph = {};
+            $seen->{$id} = { graph => $graph, kind => $kind };
+            for my $k (keys %$node) {
+                $graph->{$self->represent($k)} = $self->represent($node->{$k});
+            }
+            if ($tag) {
+                $graph->{'!'} = $tag;
+            }
+        }
+        # XXX glob should not be a kind.
+        elsif ($kind eq 'glob') {
+            $class ||= 'main';
+            $graph = {};
+            $graph->{PACKAGE} = $class;
+            $graph->{'!'} = '!perl/glob:';
+            for my $type (qw(PACKAGE NAME SCALAR ARRAY HASH CODE IO)) {
+                my $value = *{$node}{$type};
+                $value = $$value if $type eq 'SCALAR';
+                if (defined $value) {
+                    if ($type eq 'IO') {
+                        my @stats = qw(device inode mode links uid gid rdev size
+                                       atime mtime ctime blksize blocks);
+                        undef $value;
+                        $value->{stat} = {};
+                        map {$value->{stat}{shift @stats} = $_} stat(*{$node});
+                        $value->{fileno} = fileno(*{$node});
+                        {
+                            local $^W;
+                            $value->{tell} = tell(*{$node});
+                        }
+                    }
+                    $graph->{$type} = $value;
+                }
+            }
 
+        }
+        else {
+            # XXX [$id, $kind, $class];
+            die "Can't represent kind '$kind'";
+        }
+        return $graph;
     }
-    else {
-        # XXX [$id, $kind, $class];
-        die "Can't represent kind '$kind'";
+
+    sub escape {
+        my ($self, $string) = @_;
+        $string =~ s/^(\.*[\!\&\*\%])/.$1/;
+        return $string;
     }
-    return $repr;
-}
 
-sub _construct {
-    my $repr = shift;
-    my $node;
-    my ($id, $kind, $class) = _info($repr);
-    if ($kind eq 'scalar') {
-        if (not defined $repr) {
-            return undef;
-        }
-        if ($repr =~ /^\*(\S+)$/) {
-            return $seen->{$1};
-        }
-        return _unescape($repr);
+    my $perl_type = {
+        map => 'hash',
+        seq => 'array',
+        scalar => 'scalar',
+    };
+    sub resolve_to_tag {
+        my ($self, $kind, $class) = @_;
+        return $class && "!perl/$perl_type->{$kind}\:$class";
     }
-    if ($kind eq 'hash') {
-        $node = {};
-        if ($repr->{'&'}) {
-            my $anchor = $repr->{'&'};
-            delete $repr->{'&'};
-            $seen->{$anchor} = $node;
-        }
-        if ($repr->{'!'}) {
-            my $class = _resolve_from_tag($repr->{'!'});
-            delete $repr->{'!'};
-            bless $node, $class;
-        }
-        for my $k (keys %$repr) {
-            $node->{_unescape($k)} = _construct($repr->{$k});
-        }
+};
+
+{
+    package JSYNC::Loader;
+
+    sub new { bless { @_[1..$#_] }, $_[0] }
+
+    sub load {
+        my ($self, $jsync) = @_;
+        $self->{seen} = {};
+        my $graph = 'JSON'->new()->decode($jsync);
+        return $self->construct($graph);
     }
-    elsif ($kind eq 'array') {
-        $node = [];
-        if (@$repr and defined $repr->[0] and $repr->[0] =~ /^!(.*)$/) {
-            my $class = _resolve_from_tag($1);
-            shift @$repr;
-            bless $node, $class;
+
+
+    sub construct {
+        my ($self, $graph) = @_;
+        my $seen = $self->{seen};
+        my $node;
+        my ($kind, $id, $class) = JSYNC::info($graph);
+        if ($kind eq 'scalar') {
+            if (not defined $graph) {
+                return undef;
+            }
+            if ($graph =~ /^\*(\S+)$/) {
+                return $seen->{$1};
+            }
+            return $self->unescape($graph);
         }
-        if (@$repr and $repr->[0] and $repr->[0] =~ /^\&(\S+)$/) {
-            $seen->{$1} = $node;
-            shift @$repr;
+        if ($kind eq 'map') {
+            $node = {};
+            if ($graph->{'&'}) {
+                my $anchor = $graph->{'&'};
+                delete $graph->{'&'};
+                $seen->{$anchor} = $node;
+            }
+            if ($graph->{'!'}) {
+                my $class = $self->resolve_from_tag($graph->{'!'});
+                delete $graph->{'!'};
+                bless $node, $class;
+            }
+            for my $k (keys %$graph) {
+                $node->{$self->unescape($k)} = $self->construct($graph->{$k});
+            }
         }
-        @$node = map {_construct($_)} @$repr;
+        elsif ($kind eq 'seq') {
+            $node = [];
+            if (@$graph and defined $graph->[0] and $graph->[0] =~ /^!(.*)$/) {
+                my $class = $self->resolve_from_tag($1);
+                shift @$graph;
+                bless $node, $class;
+            }
+            if (@$graph and $graph->[0] and $graph->[0] =~ /^\&(\S+)$/) {
+                $seen->{$1} = $node;
+                shift @$graph;
+            }
+            @$node = map {$self->construct($_)} @$graph;
+        }
+        return $node;
     }
-    return $node;
-}
 
-sub _resolve_to_tag {
-    my ($kind, $class) = @_;
-    return $class && "!perl/$kind\:$class";
-}
+    sub unescape {
+        my ($self, $string) = @_;
+        $string =~ s/^\.(\.*[\!\&\*\%])/$1/;
+        return $string;
+    }
 
-sub _resolve_from_tag {
-    my ($tag) = @_;
-    $tag =~ m{^!perl/(?:hash|array|object):(\S+)$}
-      or die "Can't resolve tag '$tag'";
-    return $1;
-}
-
-sub _escape {
-    my $string = shift;
-    $string =~ s/^(\.*[\!\&\*\%])/.$1/;
-    return $string;
-}
-
-sub _unescape {
-    my $string = shift;
-    $string =~ s/^\.(\.*[\!\&\*\%])/$1/;
-    return $string;
-}
+    sub resolve_from_tag {
+        my ($self, $tag) = @_;
+        $tag =~ m{^!perl/(?:hash|array|object):(\S+)$}
+          or die "Can't resolve tag '$tag'";
+        return $1;
+    }
+};
 
 1;
-
-=head1 STATUS
-
-This is a very early release of JSYNC, and should not be used at all
-unless you know what you are doing.
-
-Supported so far:
-- dump and load of the basic JSON model
-- dump and load of duplicate references
-- dump and load recursive references
-- dump and load typed mappings and sequences
-- escaping of special keys and values
-- dump globs
-- add json pretty printing
 
 =head1 SYNOPSIS
 

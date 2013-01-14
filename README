@@ -1,5 +1,5 @@
 NAME
-    JSYNC - JSON YAML Notation Coding
+    JSYNC - JSon Yaml eNCoding
 
 SYNOPSIS
         use JSYNC;
@@ -10,15 +10,6 @@ SYNOPSIS
 
 DESCRIPTION
     JSYNC is an extension of JSON that can serialize any data objects.
-
-STATUS
-    This is a very early release of JSYNC, and should not be used at all
-    unless you know what you are doing.
-
-    Supported so far: - dump and load of the basic JSON model - dump and
-    load of duplicate references - dump and load recursive references - dump
-    and load typed mappings and sequences - escaping of special keys and
-    values - dump globs - add json pretty printing
 
 SEE ALSO
     *   <http://www.jsync.org/>
@@ -33,7 +24,7 @@ AUTHOR
     Ingy döt Net <ingy@ingy.net>
 
 COPYRIGHT AND LICENSE
-    Copyright (c) 2010, 2011, 2012. Ingy döt Net.
+    Copyright (c) 2010, 2011, 2012, 2013. Ingy döt Net.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself.
