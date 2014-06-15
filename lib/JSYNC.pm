@@ -1,22 +1,7 @@
-##
-# name:      JSYNC
-# abstract:  JSon Yaml eNCoding
-# author:    Ingy döt Net <ingy@ingy.net>
-# license:   perl
-# copyright: 2010, 2011, 2012, 2013
-# see:
-# - http://www.jsync.org/
-# - JSON
-# - YAML
-# - irc.freenode.net#jsync
-
-use 5.008003;
 use strict; use warnings;
 package JSYNC;
 
-use JSON 2.53;
-
-our $VERSION = '0.15';
+use JSON;
 
 {
     package JSYNC;
@@ -234,15 +219,3 @@ our $VERSION = '0.15';
 };
 
 1;
-
-=head1 SYNOPSIS
-
-    use JSYNC;
-
-    my $object = <any perl expression>
-    my $jsync = JSYNC::dump($object, {pretty => 1});
-    $object = JSYNC::load($jsync);
-
-=head1 DESCRIPTION
-
-JSYNC is an extension of JSON that can serialize any data objects.

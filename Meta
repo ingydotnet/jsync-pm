@@ -1,0 +1,33 @@
+=meta: 0.0.1
+
+name: JSYNC
+version: 0.16
+abstract: JSon Yaml eNCoding
+homepage: http://jsync.org
+
+license: perl
+copyright: 2010-2014. Ingy döt Net
+author:
+  name: Ingy döt Net
+  email: ingy@cpan.org
+  github: ingydotnet
+  twitter: ingydotnet
+  freenode: ingy
+  homepage: http://ingy.net
+
+requires:
+  perl: 5.8.1
+  JSON: 0
+
+devel:
+  git: git@github.org/ingydotnet/jsync-pm
+  irc: irc.freenode.net/jsync
+  bug: https://github.com/ingydotnet/jsync-pm/issues/
+
+=cpan:
+  include_testml: 1
+
+=travis:
+  type: perl
+  testml: yes
+  irc: irc.freenode.net#jsync
