@@ -29,5 +29,7 @@ devel:
 
 =travis:
   type: perl
-  testml: yes
+  test:
+    requires:
+      TestML: 0
   irc: irc.freenode.net#jsync
