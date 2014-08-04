@@ -1,4 +1,11 @@
 ---
+version: 0.18
+date:    Sun Aug  3 23:09:58 PDT 2014
+changes:
+- Remove (c) from Copyright
+- Meta and doc fixes.
+- Fix Meta and add Contributing
+---
 version: 0.17
 date:    Mon Jun 16 15:34:45 PDT 2014
 changes:
@@ -28,7 +35,7 @@ changes:
 version: 0.12
 date:    Thu Sep 23 14:30:49 PDT 2010
 changes:
-- Use common JSYNC TestML test suite: http://github.com/ingydotnet/jsync-tml
+- Use common JSYNC TestML test suite http://github.com/ingydotnet/jsync-tml
 - Update Makefile.PL
 ---
 version: 0.11

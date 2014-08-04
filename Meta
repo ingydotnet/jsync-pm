@@ -1,7 +1,7 @@
 =meta: 0.0.1
 
 name: JSYNC
-version: 0.17
+version: 0.18
 abstract: JSon Yaml eNCoding
 homepage: http://jsync.org
 
@@ -20,16 +20,16 @@ requires:
   JSON: 0
 
 devel:
-  git: git@github.org/ingydotnet/jsync-pm
-  irc: irc.freenode.net/jsync
-  bug: https://github.com/ingydotnet/jsync-pm/issues/
+  git: https://github.com/ingydotnet/jsync-pm
+  irc: irc.freenode.net#jsync
+  bug: https://github.com/ingydotnet/jsync-pm/issues
 
 =cpan:
   include_testml: 1
 
 =travis:
   type: perl
+  irc: irc.freenode.net#jsync
   test:
     requires:
       TestML: 0
-  irc: irc.freenode.net#jsync

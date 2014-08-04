@@ -15,13 +15,15 @@ JSon Yaml eNCoding
 
 JSYNC is an extension of JSON that can serialize any data objects.
 
+See: http://jsync.org
+
 = Author
 
 Ingy döt Net <ingy@cpan.org>
 
 = Copyright and License
 
-Copyright (c) 2010-2014. Ingy döt Net.
+Copyright 2010-2014. Ingy döt Net.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
