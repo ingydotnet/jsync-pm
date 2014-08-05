@@ -10,6 +10,10 @@ See http://github.com/ingydotnet/swim-pm#readme
 
 JSYNC - JSon Yaml eNCoding
 
+=for html
+<a href="https://travis-ci.org/ingydotnet/jsync-pm"><img src="https://travis-ci.org/ingydotnet/jsync-pm.png" alt="jsync-pm"></a>
+<a href="https://coveralls.io/r/ingydotnet/jsync-pm?branch=master"><img src="https://coveralls.io/repos/ingydotnet/jsync-pm/badge.png" alt="jsync-pm"></a>
+
 =head1 SYNOPSIS
 
     use JSYNC;

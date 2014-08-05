@@ -3,6 +3,8 @@ JSYNC
 
 JSon Yaml eNCoding
 
+<badge travis coveralls ingydotnet/jsync-pm>
+
 = Synopsis
 
   use JSYNC;
