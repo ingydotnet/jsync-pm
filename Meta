@@ -1,7 +1,7 @@
 =meta: 0.0.2
 
 name: JSYNC
-version: 0.23
+version: 0.24
 abstract: JSon Yaml eNCoding
 homepage: http://jsync.org
 language: perl
@@ -27,8 +27,3 @@ requires:
 
 =zild:
   include_testml: 1
-
-=travis:
-  test:
-    requires:
-      TestML: 0
