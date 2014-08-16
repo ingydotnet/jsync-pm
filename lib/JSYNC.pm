@@ -1,6 +1,6 @@
 use strict; use warnings;
 package JSYNC;
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 use JSON;
 
