@@ -1,4 +1,9 @@
 ---
+version: 0.25
+date:    Tue Jan 27 10:10:57 PST 2015
+changes:
+- Update packaging
+---
 version: 0.24
 date:    Sat Aug 16 14:02:38 PDT 2014
 changes:

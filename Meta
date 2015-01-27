@@ -1,12 +1,12 @@
 =meta: 0.0.2
 
 name: JSYNC
-version: 0.24
+version: 0.25
 abstract: JSon Yaml eNCoding
 homepage: http://jsync.org
 language: perl
 license: perl
-copyright: 2010-2014
+copyright: 2010-2015
 
 author:
   name: Ingy döt Net
